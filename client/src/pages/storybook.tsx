@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 
 import coverImage from "@assets/1_1766072350731.png";
-import storyImage from "@assets/2a.png";
+import storyImage from "@assets/2b.png";
 import musicImage from "@assets/2_1766072350732.png";
 import finalImage from "@assets/3_1766072350732.png";
 
