@@ -108,7 +108,7 @@ export default function Storybook() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-100 dark:from-amber-950 dark:to-orange-950 font-fredoka flex flex-col items-center justify-center px-4 py-8">
-      <audio ref={audioRef} src="@assets/chickery-chick_1766071315044.mp3" preload="auto" />
+      <audio ref={audioRef} src="/attached_assets/chickery-chick_1766071315044.mp3" preload="auto" />
       
       <AnimatePresence mode="wait">
         {currentPage === "cover" && (
