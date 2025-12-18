@@ -221,10 +221,12 @@ const goToPage = (page: PageType) => {
 
         <div className="bg-white/80 dark:bg-black/60 backdrop-blur-sm rounded-xl p-6 text-center shadow-lg max-w-md">
           <h2 className="text-2xl font-bold text-amber-800 dark:text-amber-200 mb-3 font-bubblegum">
-            The New Verse
+            A Happy Little Tune
           </h2>
           <p className="text-amber-700 dark:text-amber-300">
-            This is the new page 2 content. The page before the music starts!
+            This silly story comes from an old, happy song called **"Chickery Chick,"** played often by the great Bert Sackman! 
+        <br/><br/>
+        Turn the page to hear the music and join the dance!
           </p>
         </div>
 
