@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 
 import coverImage from "@assets/1_1766072350731.png";
+import storyImage from "@assets/2a.png";
 import musicImage from "@assets/2_1766072350732.png";
 import finalImage from "@assets/3_1766072350732.png";
 
-type PageType = "cover" | "music" | "final";
+
+type PageType = "cover" | "story" | "music" | "final";
 
 export default function Storybook() {
   const [currentPage, setCurrentPage] = useState<PageType>("cover");
@@ -89,9 +91,48 @@ export default function Storybook() {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const goToPage = (page: PageType) => {
+  // --- Sequential Navigation Logic ---
+const getNextPage = (currentPage: PageType): PageType | undefined => {
+  switch (currentPage) {
+    case "cover":
+      return "story"; // Page 1 -> Page 2 (The new page)
+    case "story":
+      return "music"; // Page 2 -> Page 3
+    case "music":
+      return "final"; // Page 3 -> Page 4
+    default:
+      return undefined;
+  }
+};
+
+// This function handles the button clicks, updates state, and manages audio
+const goToNextPage = () => {
+    const nextPage = getNextPage(currentPage);
+    if (nextPage) {
+        setCurrentPage(nextPage);
+
+        // AUTO-PLAY LOGIC: Pause the audio when leaving the music page
+        if (currentPage === "music" && audioRef.current) {
+            audioRef.current.pause();
+            setIsPlaying(false);
+        }
+        // AUTO-PLAY LOGIC: Attempt to play the audio when arriving at the 'music' page
+        if (nextPage === "music" && audioRef.current) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play().then(() => {
+                setIsPlaying(true);
+            }).catch((error) => {
+                console.warn("Autoplay attempt failed:", error);
+            });
+        }
+    }
+};
+// -------------------------------------
+
+// NOTE: Keep the existing goToPage if you need to jump directly, but you won't use it for sequencing.
+const goToPage = (page: PageType) => {
     setCurrentPage(page);
-  };
+};
 
   const pageVariants = {
     initial: { opacity: 0, x: 100, scale: 0.95 },
@@ -123,7 +164,7 @@ export default function Storybook() {
           >
             <div 
               className="relative w-full cursor-pointer group"
-              onClick={() => goToPage("music")}
+              onClick={goToNextPage}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && goToPage("music")}
@@ -153,12 +194,57 @@ export default function Storybook() {
             
             <div className="fixed bottom-6 right-6 bg-white/80 dark:bg-black/60 backdrop-blur-sm rounded-full px-4 py-2 shadow-md">
               <span className="text-lg font-medium text-amber-800 dark:text-amber-200" data-testid="text-page-indicator-cover">
-                Page 1 of 3
+                Page 1 of 4
               </span>
             </div>
           </motion.div>
         )}
 
+
+        {currentPage === "story" && (
+      <motion.div
+        key="story"
+        variants={pageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={pageTransition}
+        className="w-full max-w-2xl flex flex-col items-center gap-6"
+      >
+        <div className="relative w-full">
+          <img
+            src={storyImage} // <-- Uses the new import
+            alt="A scene from the story."
+            className="w-full rounded-2xl shadow-2xl"
+          />
+        </div>
+
+        <div className="bg-white/80 dark:bg-black/60 backdrop-blur-sm rounded-xl p-6 text-center shadow-lg max-w-md">
+          <h2 className="text-2xl font-bold text-amber-800 dark:text-amber-200 mb-3 font-bubblegum">
+            The New Verse
+          </h2>
+          <p className="text-amber-700 dark:text-amber-300">
+            This is the new page 2 content. The page before the music starts!
+          </p>
+        </div>
+
+        <Button
+          onClick={goToNextPage} // <-- Use the new sequential function
+          className="px-8 py-4 text-lg font-semibold bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-lg"
+          data-testid="button-next-page"
+        >
+          Next Page
+          <ChevronRight className="w-5 h-5 ml-2" />
+        </Button>
+
+        <div className="fixed bottom-6 right-6 bg-white/80 dark:bg-black/60 backdrop-blur-sm rounded-full px-4 py-2 shadow-md">
+          <span className="text-lg font-medium text-amber-800 dark:text-amber-200" data-testid="text-page-indicator-story">
+            Page 2 of 4
+          </span>
+        </div>
+      </motion.div>
+    )}
+        
         {currentPage === "music" && (
           <motion.div
             key="music"
@@ -256,7 +342,7 @@ export default function Storybook() {
             
             <div className="fixed bottom-6 right-6 bg-white/80 dark:bg-black/60 backdrop-blur-sm rounded-full px-4 py-2 shadow-md">
               <span className="text-lg font-medium text-amber-800 dark:text-amber-200" data-testid="text-page-indicator-music">
-                Page 2 of 3
+                Page 3 of 4
               </span>
             </div>
           </motion.div>
@@ -301,7 +387,7 @@ export default function Storybook() {
             
             <div className="fixed bottom-6 right-6 bg-white/80 dark:bg-black/60 backdrop-blur-sm rounded-full px-4 py-2 shadow-md">
               <span className="text-lg font-medium text-amber-800 dark:text-amber-200" data-testid="text-page-indicator-final">
-                Page 3 of 3
+                Page 4 of 4
               </span>
             </div>
           </motion.div>
