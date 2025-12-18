@@ -184,7 +184,7 @@ const goToPage = (page: PageType) => {
             </div>
             
             <Button
-              onClick={() => goToPage("music")}
+              onClick={goToNextPage}
               className="px-12 py-6 text-xl font-semibold bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-lg"
               data-testid="button-start-story"
             >
