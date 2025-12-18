@@ -224,7 +224,7 @@ const goToPage = (page: PageType) => {
             A Happy Little Tune
           </h2>
           <p className="text-amber-700 dark:text-amber-300">
-            This silly story comes from an old, happy song called **"Chickery Chick,"** played often by the great Bert Sackman! 
+            I'd love to share one of my favorite, silly stories with you. 
         <br/><br/>
         Turn the page to hear the music and join the dance!
           </p>
